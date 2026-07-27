@@ -180,6 +180,26 @@ headings = [(m.start(), m.group(1)) for m in re.finditer(r'^(#{2,4} .+)$', conte
 | 子导航无 callout 类型 | 按场景选 `[!abstract]+`/`[!warning]+` | 视觉区分，快速定位 |
 | `---` 只在文档末尾 | 大板块 `##` 之间都加 `---` | 结构清晰 |
 
+## 中英术语注释规范
+
+中文技术文档中，首次出现的英文术语必须在其后添加 `（中文注释）`，格式为 `English Term（中文术语）`。问答题的回答正文（span/callout 内）也需要标注。
+
+**规则：**
+- 每个 `####` Q 小节中首次出现的英文术语必须带中文注释
+- 注释只加一次——同一小节内后续重复出现同术语可省略
+- 代码、文件名、路径不添加注释
+- Agent 生成文档后必须扫描全文档：
+  1. `grep -nE '[A-Z][a-z]+[A-Z]|[a-z]+[A-Z][a-z]+' file.md | grep -v '^[^|]*|' | head -100` 提取候选术语
+  2. 用 Edit 逐段添加中文注释
+  3. 最后扫尾看有没有漏的
+
+**示例：**
+| 原文 | 修正后 |
+|------|--------|
+| `KV Cache 命中率` | `KV Cache（键值缓存）命中率` |
+| `System Prompt 编译` | `System Prompt（系统提示）编译` |
+| `Token 级别的` | `Token（令牌）级别的` |
+
 ## Obsidian Git Plugin
 
 Auto-commit only. Push to remote requires setting GitHub/Gitea remote separately — plugin does not create repos.
